@@ -1,10 +1,10 @@
 apiVersion: v1
-kind: ConfigMap
+kind: Secret
 metadata:
   name: db-credentials
 data:
-  password: Welcome
-  username: sa
+  password: d2VsY29tZQ==
+  username: c2E=
 ---
 apiVersion: v1
 kind: ConfigMap
