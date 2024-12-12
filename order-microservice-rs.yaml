@@ -101,9 +101,9 @@ data:
   username: sa
 ---
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: Deployment
 metadata:
-  name: order-microservice-rs
+  name: order-microservice-dep
   labels:
     app: order-microservice
 spec:
