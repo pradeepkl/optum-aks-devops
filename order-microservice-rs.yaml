@@ -7,6 +7,14 @@ data:
   username: c2E=
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: docker-credentials
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJjbGFzc3BhdGhpbyIsInBhc3N3b3JkIjoiV2VsY29tZTQ0IiwiZW1haWwiOiJwcmFkZWVwQGNsYXNzcGF0LmlvIiwiYXV0aCI6IlkyeGhjM053WVhSb2FXODZWMlZzWTI5dFpUUTAifX19
+---
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: order-microservice-cm
