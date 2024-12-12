@@ -10,4 +10,4 @@ spec:
   - name: app
     protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: 8222
