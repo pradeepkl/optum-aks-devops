@@ -1,3 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-credentials
+data:
+  password: Welcome
+  username: sa
 ---
 apiVersion: v1
 kind: ConfigMap
