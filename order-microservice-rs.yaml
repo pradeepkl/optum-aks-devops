@@ -1,0 +1,133 @@
+---updated configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-microservice-cm
+data:
+  application-dev.yaml: |-
+    app:
+      orderCount: 10
+    server:
+      port: 8222
+    spring:
+      datasource:
+        url: jdbc:h2:mem:orders_db
+      jpa:
+        show-sql: true
+        hibernate:
+          ddl-auto: create
+        properties:
+          hibernate:
+            format_sql: true
+      info:
+        app:
+          name: orders-api
+          description: API for managing orders
+          version: 1.0.0
+      management:
+        endpoint:
+          health:
+            show-details: "ALWAYS"
+          circuitbreakers:
+            enabled: true 
+        endpoints:
+          web:
+            exposure:
+              include: "*"
+        info:
+          env:
+            enabled: true     
+        health:
+          probes:
+            enabled: true  
+  application-qa.yaml: |-
+    app:
+      orderCount: 10
+    server:
+      port: 8333
+    spring:
+      datasource:
+        url: jdbc:h2:mem:orders_db
+      jpa:
+        show-sql: true
+        hibernate:
+          ddl-auto: create
+        properties:
+          hibernate:
+            format_sql: true
+      info:
+        app:
+          name: orders-api
+          description: API for managing orders
+          version: 1.0.0
+      management:
+        endpoint:
+          health:
+            show-details: "ALWAYS"
+          circuitbreakers:
+            enabled: true 
+        endpoints:
+          web:
+            exposure:
+              include: "*"
+        info:
+          env:
+            enabled: true     
+        health:
+          probes:
+            enabled: true 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-credentials
+data:
+  password: Welcome
+  username: sa
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: order-microservice-rs
+  labels:
+    app: order-microservice
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      app: order-microservice
+  template:
+    metadata:
+      labels:
+        app: order-microservice
+    spec:
+      containers:
+      - name: order-microservice
+        image: classpathio/order-microservice
+        ports:
+        - name: http
+          containerPort:  8080
+          protocol: TCP
+        env:
+         - name: SPRING_PROFILES_ACTIVE
+           value: dev
+         - name: SPRING_DATASOURCE_USERNAME
+           valueFrom:
+             configMapKeyRef:
+               name: db-credentials  
+               key: username
+         - name: SPRING_DATASOURCE_PASSWORD
+           valueFrom:
+             configMapKeyRef:
+               name: db-credentials  
+               key: password  
+        volumeMounts:
+        - name: app-config
+          mountPath: /app/config
+      volumes:
+        - name: app-config
+          configMap:
+            name: order-microservice-cm
+      imagePullSecrets:
+      - name: docker-credentials                   
