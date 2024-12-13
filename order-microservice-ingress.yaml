@@ -3,15 +3,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: application-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
   - host: pradeep.classpath.io
     http:
       paths:
-      - path: /orders(/|$)(.*)
+      - path: /api/v1/orders
         pathType: Prefix
         backend:
           service:
